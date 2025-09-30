@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Mate - Smart Learning Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* All your CSS styles remain exactly the same */
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #3f37c9;
+      --accent: #4cc9f0;
+      --success: #4ade80;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --gray: #64748b;
+      --gray-light: #cbd5e1;
+      --border-radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #f1f5f9;
+      color: var(--dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: white;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .logo i {
+      font-size: 1.8rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      bottom: 0;
+      width: 250px;
+      background: white;
+      box-shadow: var(--shadow);
+      padding: 1.5rem 0;
+      transition: var(--transition);
+      z-index: 900;
+      overflow-y: auto;
+    }
+
+    .sidebar.hidden {
+      transform: translateX(-100%);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-item {
+      margin-bottom: 5px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: var(--dark);
+      text-decoration: none;
+      transition: var(--transition);
+      border-left: 4px solid transparent;
+    }
+
+    .sidebar-link:hover, .sidebar-link.active {
+      background: #f1f5f9;
+      color: var(--primary);
+      border-left-color: var(--primary);
+    }
+
+    .sidebar-link i {
+      font-size: 1.2rem;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main {
+      margin-left: 250px;
+      margin-top: 70px;
+      padding: 2rem;
+      transition: var(--transition);
+      min-height: calc(100vh - 70px);
+    }
+
+    .main.full-width {
+      margin-left: 0;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--border-radius);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      padding: 1.5rem;
+      background: var(--primary);
+      color: white;
+      position: relative;
+    }
+
+    .card-header h3 {
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .card-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--gray-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-actions {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 5px;
+    }
+
+    .card-action-btn {
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0;
+    }
+
+    .card:hover .card-action-btn {
+      opacity: 1;
+    }
+
+    .card-action-btn:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+
+    .progress {
+      height: 8px;
+      background: var(--gray-light);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--success);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .stats {
+      display: flex;
+      gap: 15px;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-value {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    /* Course Detail View */
+    .course-header {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .course-title {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+
+    .course-description {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .course-meta {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gray);
+    }
+
+    .course-actions {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .lessons-container {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .lesson {
+      border-bottom: 1px solid var(--gray-light);
+      padding: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .lesson:last-child {
+      border-bottom: none;
+    }
+
+    .lesson:hover {
+      background: #f8fafc;
+    }
+
+    .lesson-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .lesson-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .lesson-duration {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .lesson-content {
+      color: var(--gray);
+      margin-bottom: 15px;
+      line-height: 1.7;
+    }
+
+    .lesson-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .tag-primary {
+      background: rgba(67, 97, 238, 0.1);
+      color: var(--primary);
+    }
+
+    .tag-success {
+      background: rgba(76, 201, 240, 0.1);
+      color: var(--accent);
+    }
+
+    .tag-warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      visibility: hidden;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .modal.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--gray-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--gray-light);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* AI Tutor */
+    .tutor {
+      position: fixed;
+      right: 0;
+      top: 70px;
+      bottom: 0;
+      width: 350px;
+      background: white;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+      transform: translateX(100%);
+      transition: var(--transition);
+      z-index: 800;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tutor.active {
+      transform: translateX(0);
+    }
+
+    .tutor-header {
+      padding: 1.5rem;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tutor-header h3 {
+      font-size: 1.3rem;
+    }
+
+    .tutor-body {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .tutor-footer {
+      padding: 1rem;
+      border-top: 1px solid var(--gray-light);
+    }
+
+    .message {
+      margin-bottom: 1rem;
+      padding: 10px 15px;
+      border-radius: var(--border-radius);
+      max-width: 80%;
+    }
+
+    .user-message {
+      background: var(--primary);
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 5px;
+    }
+
+    .tutor-message {
+      background: #f1f5f9;
+      color: var(--dark);
+      border-bottom-left-radius: 5px;
+    }
+
+    .tutor-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .tutor-input input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--border-radius);
+    }
+
+    .tutor-input button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      width: 45px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tutor-input button:hover {
+      background: var(--secondary);
+    }
+
+    /* Flashcard Styles */
+    .flashcard-container {
+      perspective: 1000px;
+      margin-bottom: 20px;
+    }
+
+    .flashcard {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      cursor: pointer;
+    }
+
+    .flashcard.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-front, .flashcard-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    .flashcard-front {
+      background: white;
+      color: var(--dark);
+    }
+
+    .flashcard-back {
+      background: var(--primary);
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    /* Quiz Styles */
+    .quiz-container {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .quiz-question {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-option {
+      padding: 12px 15px;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .quiz-option:hover {
+      background: #f1f5f9;
+    }
+
+    .quiz-option.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .quiz-result {
+      margin-top: 1.5rem;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .quiz-result.correct {
+      background: rgba(74, 222, 128, 0.2);
+      color: var(--success);
+    }
+
+    .quiz-result.incorrect {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: var(--primary);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Alert */
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--border-radius);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .alert-warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .alert-info {
+      background: rgba(67, 97, 238, 0.1);
+      color: var(--primary);
+      border: 1px solid rgba(67, 97, 238, 0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 220px;
+      }
+      
+      .main {
+        margin-left: 220px;
+      }
+      
+      .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .main {
+        margin-left: 0;
+      }
+      
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .tutor {
+        width: 100%;
+      }
+      
+      .course-actions {
+        position: static;
+        margin-top: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <i class="fas fa-graduation-cap"></i>
+      <span>Study Mate</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="user-profile">
+        <div class="avatar">
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="sidebar" id="sidebar">
+    <ul class="sidebar-menu">
+      <li class="sidebar-item">
+        <a href="#" class="sidebar-link active" onclick="showDashboard()">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="#" class="sidebar-link" onclick="showTab('courses')">
+          <i class="fas fa-book"></i>
+          <span>My Courses</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="#" class="sidebar-link" onclick="showTab('lessons')">
+          <i class="fas fa-file-alt"></i>
+          <span>Lessons</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="#" class="sidebar-link" onclick="showTab('flashcards')">
+          <i class="fas fa-layer-group"></i>
+          <span>Flashcards</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="#" class="sidebar-link" onclick="showTab('quiz')">
+          <i class="fas fa-question-circle"></i>
+          <span>Quiz</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="#" class="sidebar-link" onclick="showTab('progress')">
+          <i class="fas fa-chart-line"></i>
+          <span>Progress</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="#" class="sidebar-link" onclick="toggleTutor()">
+          <i class="fas fa-robot"></i>
+          <span>AI Tutor</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main" id="main">
+    <!-- Dashboard View -->
+    <div id="dashboard-view">
+      <div class="page-header">
+        <h1 class="page-title">Welcome to Study Mate!</h1>
+        <button class="btn btn-primary" onclick="openCourseModal()">
+          <i class="fas fa-plus"></i>
+          <span>New Course</span>
+        </button>
+      </div>
+
+      <div class="alert alert-info" id="api-status">
+        <i class="fas fa-info-circle"></i>
+        <span>Checking AI API connection...</span>
+      </div>
+
+      <div class="stats" style="margin-bottom: 2rem;">
+        <div class="stat">
+          <div class="stat-value" id="courses-count">0</div>
+          <div class="stat-label">Courses</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="lessons-count">0</div>
+          <div class="stat-label">Lessons</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="progress-value">0%</div>
+          <div class="stat-label">Progress</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="quizzes-count">0</div>
+          <div class="stat-label">Quizzes</div>
+        </div>
+      </div>
+
+      <h2 style="margin-bottom: 1.5rem;">Your Courses</h2>
+      <div class="cards-grid" id="courses-grid">
+        <!-- Courses will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <!-- Course Detail View -->
+    <div id="course-detail-view" style="display: none;">
+      <!-- Course details will be dynamically inserted here -->
+    </div>
+
+    <!-- Flashcards View -->
+    <div id="flashcards-view" style="display: none;">
+      <div class="page-header">
+        <h1 class="page-title">Flashcards</h1>
+        <button class="btn btn-outline" onclick="showDashboard()">
+          <i class="fas fa-arrow-left"></i>
+          Back to Dashboard
+        </button>
+      </div>
+      <div id="flashcards-content">
+        <!-- Flashcards will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <!-- Quiz View -->
+    <div id="quiz-view" style="display: none;">
+      <div class="page-header">
+        <h1 class="page-title">Quiz</h1>
+        <button class="btn btn-outline" onclick="showDashboard()">
+          <i class="fas fa-arrow-left"></i>
+          Back to Dashboard
+        </button>
+      </div>
+      <div id="quiz-content">
+        <!-- Quiz will be dynamically inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Course Creation Modal -->
+  <div class="modal" id="courseModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Create New Course</h2>
+        <button class="close-modal" onclick="closeCourseModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i>
+          <span>Course content will be generated automatically using AI</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Course Title</label>
+          <input type="text" class="form-control" id="courseTitle" placeholder="Enter course title">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Course Description</label>
+          <textarea class="form-control" id="courseDesc" placeholder="Describe what this course is about"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-control" id="courseCategory">
+            <option value="science">Science</option>
+            <option value="mathematics">Mathematics</option>
+            <option value="history">History</option>
+            <option value="literature">Literature</option>
+            <option value="programming">Programming</option>
+            <option value="language">Language</option>
+            <option value="business">Business</option>
+            <option value="art">Art & Design</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Difficulty Level</label>
+          <div style="display: flex; gap: 10px;">
+            <label style="display: flex; align-items: center; gap: 5px;">
+              <input type="radio" name="difficulty" value="beginner" checked> Beginner
+            </label>
+            <label style="display: flex; align-items: center; gap: 5px;">
+              <input type="radio" name="difficulty" value="intermediate"> Intermediate
+            </label>
+            <label style="display: flex; align-items: center; gap: 5px;">
+              <input type="radio" name="difficulty" value="advanced"> Advanced
+            </label>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="createCourse()" style="width: 100%;">
+          <i class="fas fa-plus"></i>
+          Create Course
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal" id="deleteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Delete Course</h2>
+        <button class="close-modal" onclick="closeDeleteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this course? This action cannot be undone.</p>
+        <p><strong id="courseToDeleteTitle"></strong></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDeleteCourse()">Delete Course</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Tutor Panel -->
+  <div class="tutor" id="tutor">
+    <div class="tutor-header">
+      <i class="fas fa-robot"></i>
+      <h3>AI Tutor</h3>
+    </div>
+    <div class="tutor-body" id="tutorChat">
+      <div class="message tutor-message">
+        Hi! I'm your AI tutor. How can I help you with your studies today?
+      </div>
+    </div>
+    <div class="tutor-footer">
+      <div class="tutor-input">
+        <input type="text" id="tutorInput" placeholder="Ask me anything...">
+        <button onclick="askTutor()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========== GLOBAL VARIABLES ==========
+    let courses = JSON.parse(localStorage.getItem("courses")) || [];
+    let activeCourse = null;
+    let flashcards = [];
+    let currentFlashcardIndex = 0;
+    let quizQuestions = [];
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let apiAvailable = false;
+    let courseToDelete = null;
+
+    // DOM Elements
+    const main = document.getElementById("main");
+    const sidebar = document.getElementById("sidebar");
+    const tutor = document.getElementById("tutor");
+    const courseModal = document.getElementById("courseModal");
+    const deleteModal = document.getElementById("deleteModal");
+    const coursesGrid = document.getElementById("courses-grid");
+    const dashboardView = document.getElementById("dashboard-view");
+    const courseDetailView = document.getElementById("course-detail-view");
+    const flashcardsView = document.getElementById("flashcards-view");
+    const quizView = document.getElementById("quiz-view");
+    const apiStatus = document.getElementById("api-status");
+
+    // API Configuration
+    const API_KEY = "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";
+    const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+    const MODEL = "deepseek/deepseek-r1-0528-qwen3-8b:free";
+
+    // ========== INITIALIZATION ==========
+    function init() {
+      checkAPIStatus();
+      renderCourses();
+      updateStats();
+      
+      // Add some sample courses if none exist
+      if (courses.length === 0) {
+        createSampleCourses();
+      }
+    }
+
+    // ========== API FUNCTIONS ==========
+    async function checkAPIStatus() {
+      try {
+        const response = await makeAPIRequest([
+          { role: "user", content: "Say 'Connected' if you can read this." }
+        ], 10);
+
+        if (response && response.choices && response.choices[0]) {
+          apiAvailable = true;
+          apiStatus.innerHTML = `
+            <i class="fas fa-check-circle"></i>
+            <span>AI API Connected! Real AI content generation enabled.</span>
+          `;
+          apiStatus.className = "alert alert-info";
+        } else {
+          throw new Error('Invalid response');
+        }
+      } catch (error) {
+        console.log('API not available, using demo mode:', error);
+        apiAvailable = false;
+        apiStatus.innerHTML = `
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Using demo mode. AI features will use pre-built content.</span>
+        `;
+        apiStatus.className = "alert alert-warning";
+      }
+    }
+
+    function makeAPIRequest(messages, max_tokens = 1000) {
+      return fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`,
+          "HTTP-Referer": "https://studymate.local",
+          "X-Title": "Study Mate",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "model": MODEL,
+          "messages": messages,
+          "max_tokens": max_tokens
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      });
+    }
+
+    // ========== COURSE MANAGEMENT ==========
+    function openCourseModal() {
+      courseModal.classList.add('active');
+    }
+
+    function closeCourseModal() {
+      courseModal.classList.remove('active');
+    }
+
+    function openDeleteModal(courseId) {
+      const course = courses.find(c => c.id === courseId);
+      if (course) {
+        courseToDelete = courseId;
+        document.getElementById('courseToDeleteTitle').textContent = course.title;
+        deleteModal.classList.add('active');
+      }
+    }
+
+    function closeDeleteModal() {
+      deleteModal.classList.remove('active');
+      courseToDelete = null;
+    }
+
+    function confirmDeleteCourse() {
+      if (courseToDelete) {
+        courses = courses.filter(c => c.id !== courseToDelete);
+        localStorage.setItem('courses', JSON.stringify(courses));
+        closeDeleteModal();
+        renderCourses();
+        updateStats();
+        
+        // If we were viewing the deleted course, go back to dashboard
+        if (activeCourse && activeCourse.id === courseToDelete) {
+          showDashboard();
+        }
+      }
+    }
+
+    async function createCourse() {
+      const title = document.getElementById('courseTitle').value.trim();
+      const description = document.getElementById('courseDesc').value.trim();
+      const category = document.getElementById('courseCategory').value;
+      const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+      
+      if (!title) {
+        alert('Please enter a course title');
+        return;
+      }
+      
+      // Show loading state
+      const createButton = document.querySelector('#courseModal .btn-primary');
+      const originalText = createButton.innerHTML;
+      createButton.innerHTML = '<div class="spinner" style="width: 20px; height: 20px;"></div>';
+      createButton.disabled = true;
+      
+      try {
+        let courseContent;
+        
+        if (apiAvailable) {
+          courseContent = await generateCourseContent(title, description, category, difficulty);
+        } else {
+          courseContent = await generateTemplateContent(title, description, category, difficulty);
+        }
+        
+        const newCourse = {
+          id: Date.now(),
+          title,
+          description,
+          category,
+          difficulty,
+          progress: 0,
+          color: getRandomColor(),
+          ...courseContent
+        };
+        
+        courses.push(newCourse);
+        localStorage.setItem('courses', JSON.stringify(courses));
+        
+        closeCourseModal();
+        renderCourses();
+        updateStats();
+        
+        // Reset form
+        document.getElementById('courseTitle').value = '';
+        document.getElementById('courseDesc').value = '';
+        
+        alert('Course created successfully!');
+      } catch (error) {
+        console.error('Error creating course:', error);
+        alert('Failed to create course. Please try again.');
+      } finally {
+        // Restore button state
+        createButton.innerHTML = originalText;
+        createButton.disabled = false;
+      }
+    }
+
+    async function generateCourseContent(title, description, category, difficulty) {
+      const prompt = `Create a comprehensive course about "${title}" (${description}) for ${difficulty} level students.
+        
+        Please provide:
+        1. 5-6 detailed lessons with:
+           - Clear, engaging lesson titles
+           - Comprehensive content (4-5 paragraphs each with practical examples)
+           - Estimated duration for each lesson (45-75 minutes)
+        2. 8-10 flashcards with:
+           - Front: key concept or question
+           - Back: detailed explanation or answer
+        3. 8-10 quiz questions with:
+           - Challenging questions that test understanding
+           - 4 multiple choice options with good distractors
+           - Correct answer (0-3 index)
+        
+        Format the response as a JSON object with this structure:
+        {
+          "lessons": [
+            {
+              "title": "Lesson Title",
+              "content": "Detailed lesson content with examples...",
+              "duration": "60 min"
+            }
+          ],
+          "flashcards": [
+            {
+              "front": "Question/Concept",
+              "back": "Detailed explanation/answer"
+            }
+          ],
+          "quiz": [
+            {
+              "question": "Challenging question text",
+              "options": ["Option A", "Option B", "Option C", "Option D"],
+              "correct": 0
+            }
+          ]
+        }
+        
+        Only return the JSON, no additional text.`;
+
+      const response = await makeAPIRequest([
+        { role: "user", content: prompt }
+      ], 5000);
+
+      if (!response || !response.choices || !response.choices[0]) {
+        throw new Error('Invalid API response');
+      }
+
+      const content = response.choices[0].message.content;
+      
+      // Extract JSON from response
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        throw new Error('Invalid response format from AI');
+      }
+      
+      return JSON.parse(jsonMatch[0]);
+    }
+
+    async function generateTemplateContent(title, description, category, difficulty) {
+      // Use comprehensive pre-built templates
+      const templates = {
+        programming: {
+          lessons: [
+            {
+              title: "Introduction to Programming Concepts",
+              content: "Programming is the process of creating a set of instructions that tell a computer how to perform a task. These instructions are written in programming languages that computers can understand and execute. Programming involves problem-solving, logical thinking, and creativity to develop software applications, websites, and systems. Understanding programming concepts is essential for anyone looking to work in technology or simply understand how the digital world works.",
+              duration: "60 min"
+            },
+            {
+              title: "Variables, Data Types, and Operators",
+              content: "Variables are containers for storing data values in memory. Different programming languages support various data types including integers, floating-point numbers, strings, booleans, and more complex structures like arrays and objects. Operators allow you to perform operations on variables and values, including arithmetic, comparison, and logical operations. Understanding how to properly declare, initialize, and use variables is fundamental to writing effective programs.",
+              duration: "75 min"
+            },
+            {
+              title: "Control Structures: Conditionals and Loops",
+              content: "Control structures like conditionals (if-else statements, switch cases) and loops (for, while, do-while) allow programs to make decisions and repeat actions. Conditionals enable programs to execute different code blocks based on certain conditions, while loops allow for repetitive execution of code blocks. Mastering control structures is crucial for creating dynamic and responsive programs that can handle various scenarios and user inputs.",
+              duration: "70 min"
+            },
+            {
+              title: "Functions and Modular Programming",
+              content: "Functions are reusable blocks of code that perform specific tasks, helping to organize code, avoid repetition, and make programs more maintainable. Modular programming involves breaking down complex problems into smaller, manageable functions. Understanding function parameters, return values, scope, and recursion are key concepts that enable you to write clean, efficient, and scalable code.",
+              duration: "65 min"
+            },
+            {
+              title: "Object-Oriented Programming Fundamentals",
+              content: "Object-Oriented Programming (OOP) is a programming paradigm based on the concept of objects, which can contain data and code. Key OOP concepts include classes, objects, inheritance, polymorphism, and encapsulation. OOP helps in organizing complex programs, promoting code reuse, and making software easier to maintain and extend. Understanding these concepts is essential for modern software development.",
+              duration: "80 min"
+            }
+          ],
+          flashcards: [
+            { front: "What is a variable?", back: "A named storage location in memory that holds a value which can be changed during program execution" },
+            { front: "What are data types?", back: "Classifications of data that determine the possible values and operations for that data type" },
+            { front: "What is a function?", back: "A reusable block of code that performs a specific task and can accept parameters and return values" },
+            { front: "What are control structures?", back: "Programming constructs that control the flow of execution in a program (conditionals and loops)" },
+            { front: "What is an algorithm?", back: "A step-by-step procedure or formula for solving a problem or accomplishing a task" },
+            { front: "What is object-oriented programming?", back: "A programming paradigm based on objects containing both data and methods" },
+            { front: "What is inheritance?", back: "A mechanism where a new class derives properties and behavior from an existing class" },
+            { front: "What is polymorphism?", back: "The ability of different objects to respond to the same message in different ways" },
+            { front: "What is encapsulation?", back: "The bundling of data with the methods that operate on that data" },
+            { front: "What is a compiler?", back: "A program that translates source code written in a programming language into machine code" }
+          ],
+          quiz: [
+            {
+              question: "What is the primary purpose of variables in programming?",
+              options: [
+                "To store and manipulate data throughout the program",
+                "To make the code more readable for humans", 
+                "To connect to external databases",
+                "To display output to users"
+              ],
+              correct: 0
+            },
+            {
+              question: "Which of these is NOT a fundamental data type in most programming languages?",
+              options: [
+                "Integer",
+                "String", 
+                "Boolean",
+                "Calculator"
+              ],
+              correct: 3
+            },
+            {
+              question: "What is the main advantage of using functions in programming?",
+              options: [
+                "Code reusability and organization",
+                "Faster program execution", 
+                "Automatic bug fixing",
+                "Better graphics rendering"
+              ],
+              correct: 0
+            },
+            {
+              question: "In object-oriented programming, what is a class?",
+              options: [
+                "A blueprint for creating objects",
+                "A type of variable", 
+                "A programming language",
+                "A debugging tool"
+              ],
+              correct: 0
+            },
+            {
+              question: "What does the 'if-else' statement allow a program to do?",
+              options: [
+                "Make decisions based on conditions",
+                "Repeat code multiple times", 
+                "Store data in memory",
+                "Connect to the internet"
+              ],
+              correct: 0
+            },
+            {
+              question: "Which loop is guaranteed to execute at least once?",
+              options: [
+                "Do-while loop",
+                "For loop", 
+                "While loop",
+                "If loop"
+              ],
+              correct: 0
+            },
+            {
+              question: "What is polymorphism in OOP?",
+              options: [
+                "The ability to present the same interface for different data types",
+                "The process of hiding implementation details", 
+                "The mechanism of inheriting properties",
+                "The way of organizing code into files"
+              ],
+              correct: 0
+            },
+            {
+              question: "What is the purpose of a constructor in a class?",
+              options: [
+                "To initialize objects when they are created",
+                "To destroy objects when they are no longer needed", 
+                "To convert objects to strings",
+                "To compare two objects"
+              ],
+              correct: 0
+            }
+          ]
+        },
+        // Additional templates for other categories would follow the same pattern
+        science: {
+          lessons: [
+            {
+              title: "The Scientific Method and Inquiry",
+              content: "The scientific method is a systematic approach to investigation that involves making observations, forming hypotheses, conducting experiments, analyzing data, and drawing conclusions. It's the foundation of all scientific inquiry and helps ensure that results are reliable, reproducible, and objective. Understanding the scientific method is crucial for critical thinking and evidence-based reasoning in all areas of life.",
+              duration: "65 min"
+            },
+            {
+              title: "Atomic Structure and Chemical Bonding",
+              content: "Atoms are the fundamental building blocks of matter, consisting of a nucleus containing protons and neutrons, surrounded by electrons in orbitals. Chemical bonding occurs when atoms share or transfer electrons to achieve stable electron configurations. The main types of chemical bonds include ionic bonds (electron transfer), covalent bonds (electron sharing), and metallic bonds (electron sea model). Understanding atomic structure and bonding is essential for comprehending the properties and behavior of different substances.",
+              duration: "75 min"
+            },
+            {
+              title: "Cell Biology and Organelles",
+              content: "Cells are the basic structural and functional units of all living organisms. Eukaryotic cells contain membrane-bound organelles that perform specific functions: the nucleus houses genetic material, mitochondria produce energy, ribosomes synthesize proteins, and the endoplasmic reticulum and Golgi apparatus process and transport cellular products. Understanding cellular structure and function is fundamental to biology and medicine.",
+              duration: "70 min"
+            },
+            {
+              title: "Genetics and DNA Replication",
+              content: "Genetics is the study of heredity and variation in living organisms. DNA (deoxyribonucleic acid) is the molecule that carries genetic information, with its double-helix structure allowing for replication and protein synthesis. The central dogma of molecular biology describes the flow of genetic information from DNA to RNA to proteins. Understanding genetics is crucial for fields ranging from medicine to agriculture to forensic science.",
+              duration: "80 min"
+            },
+            {
+              title: "Evolution and Natural Selection",
+              content: "Evolution is the process by which species change over time through genetic variation and natural selection. Natural selection occurs when individuals with advantageous traits are more likely to survive and reproduce, passing those traits to offspring. The theory of evolution, supported by extensive evidence from fossils, genetics, and comparative anatomy, provides the unifying framework for all biological sciences.",
+              duration: "75 min"
+            }
+          ],
+          flashcards: [
+            { front: "What is the scientific method?", back: "A systematic approach involving observation, hypothesis, experimentation, and conclusion" },
+            { front: "What is an atom?", back: "The basic unit of matter consisting of a nucleus (protons/neutrons) and electrons" },
+            { front: "What is a cell?", back: "The basic structural and functional unit of all living organisms" },
+            { front: "What is DNA?", back: "Deoxyribonucleic acid, the molecule that carries genetic information" },
+            { front: "What is photosynthesis?", back: "The process by which plants convert light energy into chemical energy" },
+            { front: "What is natural selection?", back: "The process where organisms better adapted to their environment tend to survive and reproduce" },
+            { front: "What is a hypothesis?", back: "A testable explanation for a phenomenon or observation" },
+            { front: "What is the periodic table?", back: "A tabular arrangement of chemical elements organized by atomic number and properties" },
+            { front: "What is mitosis?", back: "The process of cell division that results in two identical daughter cells" },
+            { front: "What is homeostasis?", back: "The maintenance of a stable internal environment despite external changes" }
+          ],
+          quiz: [
+            {
+              question: "What is the first step in the scientific method?",
+              options: [
+                "Observation",
+                "Hypothesis", 
+                "Experiment",
+                "Conclusion"
+              ],
+              correct: 0
+            },
+            {
+              question: "Which of these is NOT a state of matter?",
+              options: [
+                "Solid",
+                "Liquid", 
+                "Gas",
+                "Energy"
+              ],
+              correct: 3
+            },
+            {
+              question: "What is the primary function of mitochondria in cells?",
+              options: [
+                "Energy production (ATP synthesis)",
+                "Protein synthesis", 
+                "DNA storage",
+                "Waste removal"
+              ],
+              correct: 0
+            },
+            {
+              question: "What does DNA stand for?",
+              options: [
+                "Deoxyribonucleic Acid",
+                "Digital Network Analysis", 
+                "Dynamic Nuclear Assembly",
+                "Dual Nucleotide Array"
+              ],
+              correct: 0
+            },
+            {
+              question: "What is the main driving force behind evolution?",
+              options: [
+                "Natural selection",
+                "Random mutation", 
+                "Genetic drift",
+                "All of the above"
+              ],
+              correct: 3
+            },
+            {
+              question: "Which organelle is known as the 'powerhouse' of the cell?",
+              options: [
+                "Mitochondria",
+                "Nucleus", 
+                "Ribosome",
+                "Golgi apparatus"
+              ],
+              correct: 0
+            },
+            {
+              question: "What type of chemical bond involves sharing electrons?",
+              options: [
+                "Covalent bond",
+                "Ionic bond", 
+                "Hydrogen bond",
+                "Metallic bond"
+              ],
+              correct: 0
+            },
+            {
+              question: "What is the purpose of peer review in science?",
+              options: [
+                "To ensure research quality and validity",
+                "To make research more popular", 
+                "To increase funding opportunities",
+                "To simplify complex concepts"
+              ],
+              correct: 0
+            }
+          ]
+        }
+        // Additional categories would continue here...
+      };
+
+      const template = templates[category] || templates.programming;
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      return template;
+    }
+
+    function createSampleCourses() {
+      const sampleCourses = [
+        {
+          id: 1,
+          title: "Introduction to JavaScript Programming",
+          description: "Learn the fundamentals of JavaScript programming for web development",
+          category: "programming",
+          difficulty: "beginner",
+          progress: 75,
+          color: "#4361ee",
+          lessons: [
+            {
+              title: "JavaScript Basics and Syntax",
+              content: "JavaScript is a versatile programming language primarily used for web development. It enables interactive web pages and is an essential part of web applications. This lesson covers basic syntax, variables, data types, and how to write your first JavaScript program. You'll learn about let, const, and var for variable declaration, and understand the difference between primitive and reference data types.",
+              duration: "60 min",
+              completed: true
+            },
+            {
+              title: "Functions and Scope",
+              content: "Functions are fundamental building blocks in JavaScript. This lesson covers function declarations, expressions, arrow functions, and the concept of scope. You'll understand how variables are accessible in different parts of your code and learn about hoisting. We'll also explore parameters, return values, and how functions can be passed as arguments to other functions.",
+              duration: "75 min",
+              completed: true
+            },
+            {
+              title: "Arrays and Objects",
+              content: "Arrays and objects are essential data structures in JavaScript. Arrays store ordered collections of data, while objects store key-value pairs. This lesson covers array methods like map, filter, and reduce, as well as object properties, methods, and the concept of prototypes. You'll learn how to manipulate complex data structures effectively.",
+              duration: "70 min",
+              completed: true
+            },
+            {
+              title: "DOM Manipulation",
+              content: "The Document Object Model (DOM) represents the structure of HTML documents. This lesson teaches you how to select, create, modify, and delete HTML elements using JavaScript. You'll learn event handling, form validation, and how to create dynamic, interactive web pages that respond to user actions.",
+              duration: "65 min",
+              completed: false
+            },
+            {
+              title: "Asynchronous JavaScript",
+              content: "Asynchronous programming is crucial for handling operations that take time, like API calls. This lesson covers callbacks, promises, and async/await syntax. You'll learn how to make HTTP requests, handle errors in asynchronous code, and understand the event loop that makes JavaScript's concurrency model work.",
+              duration: "80 min",
+              completed: false
+            }
+          ],
+          flashcards: [
+            { front: "What is JavaScript?", back: "A programming language for creating dynamic web content" },
+            { front: "What is a variable?", back: "A container for storing data values" },
+            { front: "What is a function?", back: "A reusable block of code that performs a task" },
+            { front: "What is the DOM?", back: "Document Object Model - the programming interface for web documents" },
+            { front: "What is an array?", back: "An ordered collection of data items" },
+            { front: "What is an object?", back: "A collection of key-value pairs" },
+            { front: "What is event handling?", back: "Responding to user interactions like clicks and keypresses" },
+            { front: "What is asynchronous programming?", back: "Executing code without blocking the main thread" }
+          ],
+          quiz: [
+            {
+              question: "What is JavaScript primarily used for?",
+              options: [
+                "Web development",
+                "Mobile app development", 
+                "Desktop applications",
+                "All of the above"
+              ],
+              correct: 3
+            },
+            {
+              question: "Which keyword is used to declare a variable in modern JavaScript?",
+              options: [
+                "let and const",
+                "var", 
+                "variable",
+                "declare"
+              ],
+              correct: 0
+            },
+            {
+              question: "What does DOM stand for?",
+              options: [
+                "Document Object Model",
+                "Digital Object Management", 
+                "Data Object Model",
+                "Document Organization Method"
+              ],
+              correct: 0
+            },
+            {
+              question: "Which array method creates a new array by transforming every element?",
+              options: [
+                "map()",
+                "filter()", 
+                "reduce()",
+                "forEach()"
+              ],
+              correct: 0
+            },
+            {
+              question: "What is the purpose of async/await in JavaScript?",
+              options: [
+                "To write asynchronous code that looks synchronous",
+                "To make code run faster", 
+                "To handle errors automatically",
+                "To create new programming syntax"
+              ],
+              correct: 0
+            },
+            {
+              question: "Which of these is NOT a JavaScript data type?",
+              options: [
+                "character",
+                "string", 
+                "number",
+                "boolean"
+              ],
+              correct: 0
+            },
+            {
+              question: "What does 'hoisting' mean in JavaScript?",
+              options: [
+                "Moving declarations to the top of their scope",
+                "Lifting heavy objects with code", 
+                "A type of function",
+                "A debugging technique"
+              ],
+              correct: 0
+            },
+            {
+              question: "Which method is used to handle button clicks?",
+              options: [
+                "addEventListener()",
+                "onClick()", 
+                "handleClick()",
+                "clickHandler()"
+              ],
+              correct: 0
+            }
+          ]
+        },
+        {
+          id: 2,
+          title: "Introduction to Biology",
+          description: "Explore the fundamentals of life sciences and biological systems",
+          category: "science",
+          difficulty: "beginner",
+          progress: 40,
+          color: "#4cc9f0",
+          lessons: [
+            {
+              title: "The Science of Life",
+              content: "Biology is the scientific study of life and living organisms. This lesson introduces the characteristics of life, the levels of biological organization (from molecules to ecosystems), and the scientific methods used in biological research. You'll learn about the diversity of life and how biologists classify organisms into taxonomic groups.",
+              duration: "65 min",
+              completed: true
+            },
+            {
+              title: "Cell Structure and Function",
+              content: "Cells are the basic units of life. This lesson explores the structure and function of prokaryotic and eukaryotic cells, including the roles of various organelles. You'll learn about the cell membrane, nucleus, mitochondria, chloroplasts, and other cellular components that enable life processes.",
+              duration: "70 min",
+              completed: true
+            },
+            {
+              title: "Genetics and Heredity",
+              content: "Genetics is the study of how traits are passed from parents to offspring. This lesson covers Mendelian genetics, DNA structure, gene expression, and the molecular basis of inheritance. You'll understand how genetic information flows from DNA to RNA to proteins.",
+              duration: "75 min",
+              completed: false
+            },
+            {
+              title: "Evolution and Biodiversity",
+              content: "Evolution explains the diversity of life on Earth. This lesson covers natural selection, adaptation, speciation, and the evidence for evolution. You'll learn how evolutionary processes have shaped the incredible variety of life forms we see today.",
+              duration: "80 min",
+              completed: false
+            },
+            {
+              title: "Ecology and Ecosystems",
+              content: "Ecology studies the interactions between organisms and their environment. This lesson explores ecosystems, energy flow, nutrient cycling, and population dynamics. You'll understand how human activities impact ecological systems and biodiversity.",
+              duration: "70 min",
+              completed: false
+            }
+          ],
+          flashcards: [
+            { front: "What is biology?", back: "The scientific study of life and living organisms" },
+            { front: "What is a cell?", back: "The basic structural and functional unit of life" },
+            { front: "What is DNA?", back: "Deoxyribonucleic acid, the molecule carrying genetic instructions" },
+            { front: "What is evolution?", back: "The process of change in species over generations" },
+            { front: "What is photosynthesis?", back: "The process plants use to convert light energy to chemical energy" },
+            { front: "What is an ecosystem?", back: "A community of living organisms and their physical environment" },
+            { front: "What is natural selection?", back: "The process where organisms better adapted to their environment tend to survive" },
+            { front: "What is homeostasis?", back: "The maintenance of stable internal conditions in an organism" }
+          ],
+          quiz: [
+            {
+              question: "What is the basic unit of life?",
+              options: [
+                "Cell",
+                "Atom", 
+                "Molecule",
+                "Organ"
+              ],
+              correct: 0
+            },
+            {
+              question: "Which organelle is known as the 'powerhouse' of the cell?",
+              options: [
+                "Mitochondria",
+                "Nucleus", 
+                "Ribosome",
+                "Golgi apparatus"
+              ],
+              correct: 0
+            },
+            {
+              question: "What does DNA stand for?",
+              options: [
+                "Deoxyribonucleic Acid",
+                "Digital Network Analysis", 
+                "Dynamic Nuclear Assembly",
+                "Dual Nucleotide Array"
+              ],
+              correct: 0
+            },
+            {
+              question: "Who is known as the father of modern genetics?",
+              options: [
+                "Gregor Mendel",
+                "Charles Darwin", 
+                "Louis Pasteur",
+                "James Watson"
+              ],
+              correct: 0
+            },
+            {
+              question: "What is the primary source of energy for most ecosystems?",
+              options: [
+                "The Sun",
+                "Geothermal heat", 
+                "Chemical reactions",
+                "Wind power"
+              ],
+              correct: 0
+            },
+            {
+              question: "Which process do plants use to make their own food?",
+              options: [
+                "Photosynthesis",
+                "Respiration", 
+                "Digestion",
+                "Fermentation"
+              ],
+              correct: 0
+            },
+            {
+              question: "What is the main driving force behind evolution?",
+              options: [
+                "Natural selection",
+                "Random chance", 
+                "Human intervention",
+                "Climate change"
+              ],
+              correct: 0
+            },
+            {
+              question: "Which taxonomic category is the most specific?",
+              options: [
+                "Species",
+                "Genus", 
+                "Family",
+                "Order"
+              ],
+              correct: 0
+            }
+          ]
+        }
+      ];
+
+      courses = sampleCourses;
+      localStorage.setItem('courses', JSON.stringify(courses));
+      renderCourses();
+      updateStats();
+    }
+
+    function getRandomColor() {
+      const colors = ['#4361ee', '#4cc9f0', '#3f37c9', '#4895ef', '#560bad', '#7209b7'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    // ========== UI RENDERING ==========
+    function renderCourses() {
+      coursesGrid.innerHTML = '';
+      
+      if (courses.length === 0) {
+        coursesGrid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+            <i class="fas fa-book-open" style="font-size: 3rem; color: var(--gray-light); margin-bottom: 1rem;"></i>
+            <h3>No courses yet</h3>
+            <p>Create your first course to get started with Study Mate</p>
+          </div>
+        `;
+        return;
+      }
+      
+      courses.forEach(course => {
+        const completedLessons = course.lessons ? course.lessons.filter(lesson => lesson.completed).length : 0;
+        const totalLessons = course.lessons ? course.lessons.length : 0;
+        const progress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+        
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-actions">
+            <button class="card-action-btn" onclick="event.stopPropagation(); openDeleteModal(${course.id})" title="Delete Course">
+              <i class="fas fa-trash" style="color: var(--danger);"></i>
+            </button>
+          </div>
+          <div class="card-header" style="background: ${course.color}">
+            <h3>${course.title}</h3>
+            <span class="tag tag-primary">${course.difficulty}</span>
+          </div>
+          <div class="card-body">
+            <p>${course.description}</p>
+            <div class="progress">
+              <div class="progress-bar" style="width: ${progress}%"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+              <span>${progress}% complete</span>
+              <span>${totalLessons} lessons</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>${course.category}</span>
+            <button class="btn btn-outline" onclick="enterCourse(${course.id})">
+              ${progress > 0 ? 'Continue' : 'Start'}
+            </button>
+          </div>
+        `;
+        
+        coursesGrid.appendChild(card);
+      });
+    }
+
+    function updateStats() {
+      const coursesCount = courses.length;
+      const lessonsCount = courses.reduce((total, course) => total + (course.lessons ? course.lessons.length : 0), 0);
+      const completedLessons = courses.reduce((total, course) => {
+        return total + (course.lessons ? course.lessons.filter(lesson => lesson.completed).length : 0);
+      }, 0);
+      const progress = lessonsCount > 0 ? Math.round((completedLessons / lessonsCount) * 100) : 0;
+      const quizzesCount = courses.reduce((total, course) => total + (course.quiz ? course.quiz.length : 0), 0);
+      
+      document.getElementById('courses-count').textContent = coursesCount;
+      document.getElementById('lessons-count').textContent = lessonsCount;
+      document.getElementById('progress-value').textContent = `${progress}%`;
+      document.getElementById('quizzes-count').textContent = quizzesCount;
+    }
+
+    // ========== NAVIGATION ==========
+    function toggleSidebar() {
+      sidebar.classList.toggle('hidden');
+      main.classList.toggle('full-width');
+    }
+
+    function showDashboard() {
+      dashboardView.style.display = 'block';
+      courseDetailView.style.display = 'none';
+      flashcardsView.style.display = 'none';
+      quizView.style.display = 'none';
+      setActiveSidebarLink('dashboard');
+    }
+
+    function showTab(tabName) {
+      if (tabName === 'flashcards') {
+        showFlashcards();
+      } else if (tabName === 'quiz') {
+        showQuiz();
+      } else {
+        showDashboard();
+        setActiveSidebarLink(tabName);
+      }
+    }
+
+    function setActiveSidebarLink(linkName) {
+      const links = document.querySelectorAll('.sidebar-link');
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.textContent.toLowerCase().includes(linkName)) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    // ========== COURSE INTERACTION ==========
+    function enterCourse(courseId) {
+      activeCourse = courses.find(c => c.id === courseId);
+      
+      if (!activeCourse) return;
+      
+      dashboardView.style.display = 'none';
+      courseDetailView.style.display = 'block';
+      flashcardsView.style.display = 'none';
+      quizView.style.display = 'none';
+      
+      const completedLessons = activeCourse.lessons ? activeCourse.lessons.filter(lesson => lesson.completed).length : 0;
+      const totalLessons = activeCourse.lessons ? activeCourse.lessons.length : 0;
+      const progress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+      
+      courseDetailView.innerHTML = `
+        <div class="course-header">
+          <div class="course-actions">
+            <button class="btn btn-outline" onclick="showDashboard()">
+              <i class="fas fa-arrow-left"></i>
+              Back to Courses
+            </button>
+            <button class="btn btn-danger" onclick="openDeleteModal(${activeCourse.id})">
+              <i class="fas fa-trash"></i>
+              Delete Course
+            </button>
+          </div>
+          <h1 class="course-title">${activeCourse.title}</h1>
+          <p class="course-description">${activeCourse.description}</p>
+          <div class="course-meta">
+            <div class="meta-item">
+              <i class="fas fa-tag"></i>
+              <span>${activeCourse.category}</span>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-signal"></i>
+              <span>${activeCourse.difficulty}</span>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-book"></i>
+              <span>${totalLessons} lessons</span>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-chart-line"></i>
+              <span>${progress}% complete</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="page-header">
+          <h2 class="page-title">Lessons</h2>
+          <div>
+            <button class="btn btn-outline" onclick="showFlashcards()">
+              <i class="fas fa-layer-group"></i>
+              Flashcards (${activeCourse.flashcards ? activeCourse.flashcards.length : 0})
+            </button>
+            <button class="btn btn-outline" onclick="showQuiz()">
+              <i class="fas fa-question-circle"></i>
+              Take Quiz (${activeCourse.quiz ? activeCourse.quiz.length : 0} questions)
+            </button>
+          </div>
+        </div>
+        
+        ${activeCourse.lessons && activeCourse.lessons.length > 0 ? `
+          <div class="lessons-container">
+            ${activeCourse.lessons.map((lesson, index) => `
+              <div class="lesson">
+                <div class="lesson-header">
+                  <h3 class="lesson-title">${lesson.title}</h3>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span class="lesson-duration">${lesson.duration || '60 min'}</span>
+                    ${lesson.completed ? '<span class="tag tag-success">Completed</span>' : ''}
+                  </div>
+                </div>
+                <p class="lesson-content">${lesson.content}</p>
+                <div class="lesson-actions">
+                  <button class="btn ${lesson.completed ? 'btn-primary' : 'btn-outline'}" 
+                          onclick="toggleLessonCompletion(${courseId}, ${index})">
+                    <i class="fas ${lesson.completed ? 'fa-check' : 'fa-play'}"></i>
+                    ${lesson.completed ? 'Completed' : 'Start Lesson'}
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        ` : `
+          <div style="text-align: center; padding: 3rem; background: white; border-radius: var(--border-radius);">
+            <i class="fas fa-book-open" style="font-size: 3rem; color: var(--gray-light); margin-bottom: 1rem;"></i>
+            <h3>No lessons available</h3>
+            <p>Lessons will be generated when you create a course</p>
+          </div>
+        `}
+        
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+          <button class="btn btn-primary" onclick="toggleTutor()">
+            <i class="fas fa-robot"></i>
+            Ask AI Tutor
+          </button>
+        </div>
+      `;
+    }
+
+    function toggleLessonCompletion(courseId, lessonIndex) {
+      const course = courses.find(c => c.id === courseId);
+      if (!course || !course.lessons || !course.lessons[lessonIndex]) return;
+      
+      course.lessons[lessonIndex].completed = !course.lessons[lessonIndex].completed;
+      
+      localStorage.setItem('courses', JSON.stringify(courses));
+      enterCourse(courseId);
+      updateStats();
+    }
+
+    // ========== FLASHCARDS ==========
+    function showFlashcards() {
+      if (!activeCourse || !activeCourse.flashcards || activeCourse.flashcards.length === 0) {
+        flashcardsView.innerHTML = `
+          <div class="page-header">
+            <h1 class="page-title">Flashcards</h1>
+            <button class="btn btn-outline" onclick="enterCourse(${activeCourse.id})">
+              <i class="fas fa-arrow-left"></i>
+              Back to Course
+            </button>
+          </div>
+          <div style="text-align: center; padding: 3rem;">
+            <i class="fas fa-layer-group" style="font-size: 3rem; color: var(--gray-light); margin-bottom: 1rem;"></i>
+            <h3>No flashcards available</h3>
+            <p>Flashcards will be generated when you create a course</p>
+          </div>
+        `;
+        return;
+      }
+      
+      flashcards = activeCourse.flashcards;
+      currentFlashcardIndex = 0;
+      
+      dashboardView.style.display = 'none';
+      courseDetailView.style.display = 'none';
+      flashcardsView.style.display = 'block';
+      quizView.style.display = 'none';
+      
+      renderFlashcard();
+    }
+
+    function renderFlashcard() {
+      if (flashcards.length === 0) return;
+      
+      const flashcard = flashcards[currentFlashcardIndex];
+      
+      flashcardsView.innerHTML = `
+        <div class="page-header">
+          <h1 class="page-title">Flashcards: ${activeCourse.title}</h1>
+          <button class="btn btn-outline" onclick="enterCourse(${activeCourse.id})">
+            <i class="fas fa-arrow-left"></i>
+            Back to Course
+          </button>
+        </div>
+        
+        <div class="flashcard-container">
+          <div class="flashcard" id="flashcard" onclick="flipFlashcard()">
+            <div class="flashcard-front">
+              <h3>${flashcard.front}</h3>
+              <p style="margin-top: 10px; color: var(--gray);">Click to flip</p>
+            </div>
+            <div class="flashcard-back">
+              <h3>${flashcard.back}</h3>
+              <p style="margin-top: 10px; color: rgba(255,255,255,0.8);">Click to flip back</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flashcard-nav">
+          <button class="btn btn-outline" onclick="prevFlashcard()" ${currentFlashcardIndex === 0 ? 'disabled' : ''}>
+            <i class="fas fa-chevron-left"></i>
+            Previous
+          </button>
+          <span>${currentFlashcardIndex + 1} / ${flashcards.length}</span>
+          <button class="btn btn-outline" onclick="nextFlashcard()" ${currentFlashcardIndex === flashcards.length - 1 ? 'disabled' : ''}>
+            Next
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+        
+        <div style="margin-top: 2rem; display: flex; justify-content: center;">
+          <button class="btn btn-primary" onclick="enterCourse(${activeCourse.id})">
+            <i class="fas fa-arrow-left"></i>
+            Back to Course
+          </button>
+        </div>
+      `;
+    }
+
+    function flipFlashcard() {
+      const flashcard = document.getElementById('flashcard');
+      flashcard.classList.toggle('flipped');
+    }
+
+    function prevFlashcard() {
+      if (currentFlashcardIndex > 0) {
+        currentFlashcardIndex--;
+        renderFlashcard();
+      }
+    }
+
+    function nextFlashcard() {
+      if (currentFlashcardIndex < flashcards.length - 1) {
+        currentFlashcardIndex++;
+        renderFlashcard();
+      }
+    }
+
+    // ========== QUIZ ==========
+    function showQuiz() {
+      if (!activeCourse || !activeCourse.quiz || activeCourse.quiz.length === 0) {
+        quizView.innerHTML = `
+          <div class="page-header">
+            <h1 class="page-title">Quiz</h1>
+            <button class="btn btn-outline" onclick="enterCourse(${activeCourse.id})">
+              <i class="fas fa-arrow-left"></i>
+              Back to Course
+            </button>
+          </div>
+          <div style="text-align: center; padding: 3rem;">
+            <i class="fas fa-question-circle" style="font-size: 3rem; color: var(--gray-light); margin-bottom: 1rem;"></i>
+            <h3>No quiz available</h3>
+            <p>Quiz questions will be generated when you create a course</p>
+          </div>
+        `;
+        return;
+      }
+      
+      quizQuestions = activeCourse.quiz;
+      currentQuizIndex = 0;
+      quizScore = 0;
+      
+      dashboardView.style.display = 'none';
+      courseDetailView.style.display = 'none';
+      flashcardsView.style.display = 'none';
+      quizView.style.display = 'block';
+      
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      if (quizQuestions.length === 0) return;
+      
+      const question = quizQuestions[currentQuizIndex];
+      
+      quizView.innerHTML = `
+        <div class="page-header">
+          <h1 class="page-title">Quiz: ${activeCourse.title}</h1>
+          <button class="btn btn-outline" onclick="enterCourse(${activeCourse.id})">
+            <i class="fas fa-arrow-left"></i>
+            Back to Course
+          </button>
+        </div>
+        
+        <div class="quiz-container">
+          <div class="progress">
+            <div class="progress-bar" style="width: ${(currentQuizIndex / quizQuestions.length) * 100}%"></div>
+          </div>
+          
+          <h2 class="quiz-question">${question.question}</h2>
+          
+          <div class="quiz-options" id="quiz-options">
+            ${question.options.map((option, index) => `
+              <div class="quiz-option" onclick="selectQuizOption(${index})">
+                ${option}
+              </div>
+            `).join('')}
+          </div>
+          
+          <button class="btn btn-primary" onclick="submitQuizAnswer()" id="submit-btn" disabled>
+            Submit Answer
+          </button>
+          
+          <div id="quiz-result"></div>
+        </div>
+        
+        <div style="margin-top: 1rem; text-align: center;">
+          <span>Question ${currentQuizIndex + 1} of ${quizQuestions.length}</span>
+        </div>
+      `;
+    }
+
+    function selectQuizOption(optionIndex) {
+      const options = document.querySelectorAll('.quiz-option');
+      options.forEach(option => option.classList.remove('selected'));
+      options[optionIndex].classList.add('selected');
+      
+      document.getElementById('submit-btn').disabled = false;
+      window.selectedOption = optionIndex;
+    }
+
+    function submitQuizAnswer() {
+      const question = quizQuestions[currentQuizIndex];
+      const isCorrect = window.selectedOption === question.correct;
+      
+      if (isCorrect) {
+        quizScore++;
+      }
+      
+      const resultDiv = document.getElementById('quiz-result');
+      resultDiv.innerHTML = `
+        <div class="quiz-result ${isCorrect ? 'correct' : 'incorrect'}">
+          <i class="fas ${isCorrect ? 'fa-check' : 'fa-times'}"></i>
+          ${isCorrect ? 'Correct!' : `Incorrect. The right answer is: ${question.options[question.correct]}`}
+        </div>
+      `;
+      
+      document.getElementById('submit-btn').textContent = 'Next Question';
+      document.getElementById('submit-btn').onclick = nextQuizQuestion;
+      
+      if (currentQuizIndex === quizQuestions.length - 1) {
+        document.getElementById('submit-btn').textContent = 'View Results';
+      }
+    }
+
+    function nextQuizQuestion() {
+      if (currentQuizIndex < quizQuestions.length - 1) {
+        currentQuizIndex++;
+        renderQuizQuestion();
+      } else {
+        showQuizResults();
+      }
+    }
+
+    function showQuizResults() {
+      const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+      const passed = percentage >= 70;
+      
+      quizView.innerHTML = `
+        <div class="page-header">
+          <h1 class="page-title">Quiz Results: ${activeCourse.title}</h1>
+          <button class="btn btn-outline" onclick="enterCourse(${activeCourse.id})">
+            <i class="fas fa-arrow-left"></i>
+            Back to Course
+          </button>
+        </div>
+        
+        <div class="quiz-container" style="text-align: center;">
+          <h2>Quiz Complete!</h2>
+          <div style="font-size: 3rem; color: ${passed ? 'var(--success)' : 'var(--danger)'}; margin: 1rem 0;">
+            ${percentage}%
+          </div>
+          <p>You scored ${quizScore} out of ${quizQuestions.length} questions correctly.</p>
+          
+          ${passed ? `
+            <div class="alert alert-info">
+              <i class="fas fa-check-circle"></i>
+              <span>Congratulations! You passed the quiz with a score of ${percentage}%.</span>
+            </div>
+            <p>Great job! You have demonstrated a solid understanding of this material.</p>
+          ` : `
+            <div class="alert alert-warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              <span>You scored ${percentage}%, which is below the passing threshold of 70%.</span>
+            </div>
+            <p>We recommend reviewing the course material and retaking the quiz to improve your understanding.</p>
+          `}
+          
+          <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <button class="btn btn-outline" onclick="showQuiz()">
+              <i class="fas fa-redo"></i>
+              Retake Quiz
+            </button>
+            ${!passed ? `
+              <button class="btn btn-warning" onclick="retakeCourse()">
+                <i class="fas fa-book"></i>
+                Review Course Material
+              </button>
+            ` : ''}
+            <button class="btn btn-primary" onclick="enterCourse(${activeCourse.id})">
+              <i class="fas fa-arrow-left"></i>
+              Back to Course
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function retakeCourse() {
+      // Reset all lessons to incomplete
+      if (activeCourse && activeCourse.lessons) {
+        activeCourse.lessons.forEach(lesson => {
+          lesson.completed = false;
+        });
+        activeCourse.progress = 0;
+        
+        localStorage.setItem('courses', JSON.stringify(courses));
+        enterCourse(activeCourse.id);
+        updateStats();
+        
+        alert('Course progress has been reset. Please review all lessons before retaking the quiz.');
+      }
+    }
+
+    // ========== AI TUTOR ==========
+    function toggleTutor() {
+      tutor.classList.toggle('active');
+    }
+
+    async function askTutor() {
+      const input = document.getElementById('tutorInput');
+      const chat = document.getElementById('tutorChat');
+      const question = input.value.trim();
+      
+      if (!question) return;
+      
+      chat.innerHTML += `
+        <div class="message user-message">
+          ${question}
+        </div>
+      `;
+      
+      input.value = '';
+      
+      chat.innerHTML += `
+        <div class="message tutor-message">
+          <div class="spinner" style="width: 20px; height: 20px;"></div>
+        </div>
+      `;
+      
+      chat.scrollTop = chat.scrollHeight;
+      
+      try {
+        let answer;
+        
+        if (apiAvailable) {
+          const context = activeCourse ? 
+            `Context: The user is studying "${activeCourse.title}" - ${activeCourse.description}. ` : 
+            '';
+          
+          const response = await makeAPIRequest([
+            { 
+              role: "system", 
+              content: "You are an AI tutor helping students with their studies. Provide clear, educational explanations." 
+            },
+            { 
+              role: "user", 
+              content: `${context}Student's question: ${question}` 
+            }
+          ], 1000);
+
+          if (!response || !response.choices || !response.choices[0]) {
+            throw new Error('Invalid API response');
+          }
+
+          answer = response.choices[0].message.content;
+        } else {
+          const demoResponses = [
+            "That's a great question! Based on what you're studying, I would recommend focusing on the key concepts first.",
+            "I understand your confusion. Let me explain this in a different way that might help clarify things.",
+            "This is a common point of confusion. The important thing to remember is that practice makes perfect.",
+            "Based on your current progress, I suggest reviewing the previous lesson before moving forward.",
+            "Excellent question! This concept is fundamental to understanding the next section of your course."
+          ];
+          
+          answer = demoResponses[Math.floor(Math.random() * demoResponses.length)];
+        }
+        
+        const messages = chat.querySelectorAll('.message');
+        messages[messages.length - 1].remove();
+        
+        chat.innerHTML += `
+          <div class="message tutor-message">
+            ${answer}
+          </div>
+        `;
+      } catch (error) {
+        console.error('Error asking tutor:', error);
+        
+        const messages = chat.querySelectorAll('.message');
+        messages[messages.length - 1].remove();
+        
+        chat.innerHTML += `
+          <div class="message tutor-message">
+            Sorry, I'm having trouble connecting right now. Please try again later.
+          </div>
+        `;
+      }
+      
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    // Initialize the app when the page loads
+    window.onload = init;
+  </script>
+</body>
+</html>
